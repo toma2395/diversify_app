@@ -10,7 +10,7 @@ def get_current_date():
         "day_of_month": str(datetime.datetime.today().day),
         "month": str(datetime.datetime.today().month),
         "year": str(datetime.datetime.today().year),
-        "timestamp": str(datetime.datetime.today().timestamp()),
+        "timestamp": str(datetime.datetime.today().time()),
     }
 
     return json.dumps(date)
