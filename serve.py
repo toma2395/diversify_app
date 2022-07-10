@@ -14,19 +14,20 @@ class index:
     def GET(self):
         return "Hello, world!"
 
+
 class get_time:
     def GET(self):
         web.header('Content-Type', 'application/json')
         return get_current_date()
 
+
 class insert_volunteer:
     def POST(self):
         web.header('Content-Type', 'application/json')
-        input_body=web.data().decode()
+        input_body = web.data().decode()
         print(input_body)
         web.header('Company', 'Diversify')
         return input_body
-
 
 
 if __name__ == "__main__":
