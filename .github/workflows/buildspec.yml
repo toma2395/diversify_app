@@ -35,6 +35,7 @@ jobs:
     - name: SetUp DB for testing
       run: |
         docker run --name diversify_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
+        sleep 10
     - name: Test with pytest
       run: |
         pytest test_service.py
