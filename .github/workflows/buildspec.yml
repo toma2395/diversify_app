@@ -82,7 +82,7 @@ jobs:
         env:
           IMAGEURL: zamianka
         with:
-          filename: /k8s/app_token.yml
+          filename: ./k8s/app_token.yml
       - name: checking zamianka ???
         run: |
           cat /k8s/app_token.yml
