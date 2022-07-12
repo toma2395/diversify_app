@@ -8,7 +8,7 @@ on:
 
 env:
   REGION: us-east-1
-  ACCOUNT_ID: 012648543433
+  ACCOUNT_ID: '012648543433'
 
 
 jobs:
