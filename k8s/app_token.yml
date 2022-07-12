@@ -51,7 +51,7 @@ metadata:
    #nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 spec:
   rules:
-  - host: a8262bb00392b42f0970b77183399aab-24abfda36a8cf3d7.elb.us-east-1.amazonaws.com #NLB
+  - host: __NLB__ #NLB
     http:
       paths:
       - backend:
