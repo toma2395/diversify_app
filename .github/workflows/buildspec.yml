@@ -52,12 +52,12 @@ jobs:
         pytest
       working-directory: ./app
 
-    - name: Configure AWS Credentials and Docker login
+    - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: $REGION
+        aws-region: ${{ env.REGION }}
     - name:  Docker login
       run: |
         aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app
