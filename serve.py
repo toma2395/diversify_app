@@ -1,12 +1,14 @@
 import web
+import json
 
-from service import get_current_date
+from service import get_current_date, get_all_volunteers, create_volunteer, get_one_volunteer_by_id
 
 
 urls = (
   '/', 'index',
   '/get-current-date', 'get_time',
-  '/add-volunteer', 'insert_volunteer'
+  '/volunteer', 'volunteer',
+  '/volunteer/(.+)', 'volunteer_listing'
 )
 
 
@@ -21,13 +23,30 @@ class get_time:
         return get_current_date()
 
 
-class insert_volunteer:
+class volunteer:
     def POST(self):
         web.header('Content-Type', 'application/json')
         input_body = web.data().decode()
         print(input_body)
         web.header('Company', 'Diversify')
-        return input_body
+        data = json.loads(input_body)
+        try:
+            response = create_volunteer(data['name'], data['surname'], data['city'], data['country'])
+        except KeyError:
+            web.badrequest()
+            return json.dumps({"error_message": "wrong body"})
+        web.created()
+        return response
+
+    def GET(self):
+        web.header('Content-Type', 'application/json')
+        return get_all_volunteers()
+
+
+class volunteer_listing:
+    def GET(self, user_id):
+        web.header('Content-Type', 'application/json')
+        return get_one_volunteer_by_id(user_id)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
 web.py==0.62
 typing_extensions==4.3.0
 flake8==4.0.1
+psycopg2==2.9.3
