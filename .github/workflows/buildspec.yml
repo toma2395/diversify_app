@@ -77,12 +77,7 @@ jobs:
       needs: build
 
       steps:
-      - uses: falnyr/replace-env-vars-action@master
-        env:
-          IMAGEURL: zamianka
-        with:
-          filename: ./k8s/app_token.yml
-
+      - uses: actions/checkout@v3
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -110,6 +105,7 @@ jobs:
         needs: build
 
         steps:
+        - uses: actions/checkout@v3
         - name: Configure AWS Credentials
           uses: aws-actions/configure-aws-credentials@v1
           with:
