@@ -53,6 +53,12 @@ jobs:
         pytest
       working-directory: ./app
 
+    - name: test coverage
+      run: |
+        coverage run -m pytest
+        coverage report
+      working-directory: ./app
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
