@@ -34,8 +34,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: SetUp DB for testing
       run: |
-        docker run --name diversify_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
+        docker build -t diversify_db:latest .
+        docker run --name diversify_db -d diversify_db:latest
         sleep 10
+      working-directory: /db
     - name: Test with pytest
       run: |
-        pytest test_service.py
+        pytest
