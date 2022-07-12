@@ -105,7 +105,6 @@ jobs:
 
   deploy_db:
         runs-on: ubuntu-latest
-        if: ${{ env.DATABASE_UPDATE }} == True
         needs: build
         steps:
         - uses: actions/checkout@v3
