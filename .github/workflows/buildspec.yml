@@ -37,7 +37,7 @@ jobs:
         docker build -t diversify_db:latest .
         docker run --name diversify_db -d diversify_db:latest
         sleep 10
-      working-directory: /db
+      working-directory: ./db
     - name: Test with pytest
       run: |
         pytest
