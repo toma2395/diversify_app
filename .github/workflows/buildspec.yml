@@ -9,7 +9,7 @@ on:
 env:
   REGION: us-east-1
   ACCOUNT_ID: '012648543433'
-
+  DATABASE_UPDATE: False
 
 jobs:
   build:
@@ -83,6 +83,7 @@ jobs:
           IMAGEURL: zamianka
         with:
           filename: /k8s/app_token.yml
+      - name: checking zamianka ???
         run: |
           cat /k8s/app_token.yml
       - name: Configure AWS Credentials
@@ -104,6 +105,7 @@ jobs:
 
   deploy_db:
         runs-on: ubuntu-latest
+        if: env.DATABASE_UPDATE == True
         needs: build
 
         steps:
