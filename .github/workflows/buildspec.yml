@@ -105,9 +105,8 @@ jobs:
 
   deploy_db:
         runs-on: ubuntu-latest
-        if: $DATABASE_UPDATE == True
+        if: ${{ env.DATABASE_UPDATE }} == True
         needs: build
-
         steps:
         - uses: actions/checkout@v3
         - name: Configure AWS Credentials
