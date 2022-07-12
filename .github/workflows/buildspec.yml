@@ -68,7 +68,7 @@ jobs:
       working-directory:  ./app
     - name:  Docker push
       run: |
-        docker push diversify_app:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app:latest
+        docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app:latest
 
 
 
