@@ -1,7 +1,9 @@
 FROM python:3.10
-COPY ./app /
+COPY ./ /app
 
 RUN pip install -r requirements.txt
+
+WORKDIR /app
 
 EXPOSE 8080
 
