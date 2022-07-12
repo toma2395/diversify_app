@@ -78,17 +78,19 @@ jobs:
 
       steps:
       - uses: actions/checkout@v3
+      - uses: falnyr/replace-env-vars-action@master
+        env:
+          IMAGEURL: zamianka
+        with:
+          filename: /k8s/app_token.yml
+        run: |
+          cat /k8s/app_token.yml
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
-      # - uses: actions-hub/kubectl@1.14.3
-      #   env:
-      #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-      #   with:
-      #     args: get pods
       - name: check kubectl
         run: |
           aws eks update-kubeconfig --name dev_k8s_cluster --region $REGION
