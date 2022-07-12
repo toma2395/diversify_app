@@ -84,10 +84,10 @@ jobs:
           IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
           NLB: ${{ env.NLB_DNS_NAME }}
         with:
-          filename: ./k8s/app_token.yml
-      - name: checking zamianka ???
+          filename: ./k8s/app.yml
+      - name: print ?
         run: |
-          cat ./k8s/app_token.yml
+          cat ./k8s/app.yml
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -99,13 +99,14 @@ jobs:
           aws eks update-kubeconfig --name dev_k8s_cluster --region $REGION
       - name: deploy APP to k8s
         run: |
-          kubectl apply -f ./k8s/app_token.yml
+          kubectl apply -f ./k8s/app.yml
 
 
 
 
   deploy_db:
         runs-on: ubuntu-latest
+        if: github.event_name == 'push' &&  env.DATABASE_UPDATE == True
         needs: build
         steps:
         - uses: actions/checkout@v3
