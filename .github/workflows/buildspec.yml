@@ -35,7 +35,7 @@ jobs:
     - name: SetUp DB for testing
       run: |
         docker build -t diversify_db:latest .
-        docker run --name diversify_db -d diversify_db:latest
+        docker run --name diversify_db -p 5432:5432 -d diversify_db:latest
         sleep 10
       working-directory: ./db
     - name: Test with pytest
