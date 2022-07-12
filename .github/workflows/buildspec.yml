@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  REGION: us-east-1
+  ACCOUNT_ID: 906495541320
+
+
 jobs:
   build:
 
@@ -26,12 +31,16 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      working-directory: ./app
+
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --ignore=E501 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      working-directory: ./app
+
     - name: SetUp DB for testing
       run: |
         docker build -t diversify_db:latest .
@@ -41,3 +50,25 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+      working-directory: ./app
+
+    - name: Configure AWS Credentials and Docker login
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: $REGION
+    - name:  Docker login
+      run: |
+        aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app
+    - name:  Docker build
+      run: |
+        docker build -t diversify_app:latest .
+        docker tag diversify_app:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app:latest
+      working-directory:  ./app
+    - name:  Docker push
+      run: |
+        docker push diversify_app:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app:latest
+
+
+
