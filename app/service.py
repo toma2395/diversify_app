@@ -22,7 +22,7 @@ def get_current_date():
 def create_volunteer(name, surname, city, country):
     '''creates volunteer'''
     row_id = create_volunteer_db(name, surname, city, country)
-    response = json.dumps(retrive_one_user(row_id), cls=DateEncoder)
+    response = json.dumps(retrive_one_user(row_id)[0], cls=DateEncoder)
     return response
 
 
