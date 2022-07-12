@@ -81,8 +81,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: falnyr/replace-env-vars-action@master
         env:
-          IMAGEURL: $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app:latest
-          NLB: $NLB_DNS_NAME
+          IMAGEURL: ${{ ACCOUNT_ID }}.dkr.ecr.$${{ REGION }}.amazonaws.com/diversify_app:latest
+          NLB: ${{ NLB_DNS_NAME }}
         with:
           filename: ./k8s/app_token.yml
       - name: checking zamianka ???
@@ -132,9 +132,9 @@ jobs:
             aws eks update-kubeconfig --name dev_k8s_cluster --region $REGION
         - uses: falnyr/replace-env-vars-action@master
           env:
-            DBIMAGE: $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db:latest
+            DBIMAGE: ${{ ACCOUNT_ID }}.dkr.ecr.$${{ REGION }}.amazonaws.com/diversify_db:latest
           with:
             filename: ./k8s/db.yml
         - name: deploy DB to k8s
           run: |
-            kubectl apply -f ./k8s/app_token.yml
+            kubectl apply -f ./k8s/db.yml
