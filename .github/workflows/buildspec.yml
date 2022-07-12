@@ -8,7 +8,7 @@ on:
 
 env:
   REGION: us-east-1
-  ACCOUNT_ID: 906495541320
+  ACCOUNT_ID: 012648543433
 
 
 jobs:
@@ -77,19 +77,54 @@ jobs:
       needs: build
 
       steps:
+      - uses: falnyr/replace-env-vars-action@master
+        env:
+          IMAGEURL: zamianka
+          BAR: bar
+        with:
+          filename: /k8s/app_token.yml
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
-      - uses: actions-hub/kubectl@1.14.3
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-        with:
-          args: get pods
+      # - uses: actions-hub/kubectl@1.14.3
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      #   with:
+      #     args: get pods
+      - name: check kubectl
+        run: |
+          aws eks update-kubeconfig --name dev_k8s_cluster --region $REGION
       - name: deploy to k8s
         run: |
           echo "tutaj deploj"
           echo $KUBE_CONFIG
           kubectl get pods -A
+
+
+
+  deploy_db:
+        runs-on: ubuntu-latest
+        needs: build
+
+        steps:
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ env.REGION }}
+        - name:  Docker login
+          run: |
+            aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db
+        - name:  Docker build
+          run: |
+            docker build -t diversify_db:latest .
+            docker tag diversify_db:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db:latest
+          working-directory:  ./db
+        - name:  Docker push
+          run: |
+            docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db:latest

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: diversify-db
+  name: diversify-db
+spec:
+  containers:
+  - env:
+    - name: POSTGRES_USER
+      value: admin
+    - name: POSTGRES_PASSWORD
+      value: mypassword
+    - name: POSTGRES_DATABASE
+      value: diversify_db
+    image: 906495541320.dkr.ecr.us-east-1.amazonaws.com/diversify_db:latest #image
+    name: diversify-db
+    ports:
+    - containerPort: 5432
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db-service
+  name: db-service
+spec:
+  ports:
+  - name: 5432-5432
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: diversify-db
+  type: ClusterIP
+status:
+  loadBalancer: {}
