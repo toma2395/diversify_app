@@ -65,11 +65,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.REGION }}
-    - name: env export #todo
-      run: |
-        nlb=$(aws elbv2 describe-load-balancers --region $REGION | jq -r '.LoadBalancers[0].DNSName')
-        export NLB1=$nlb
-        echo $NLB1
     - name:  Docker login
       run: |
         aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app
@@ -90,21 +85,26 @@ jobs:
 
       steps:
       - uses: actions/checkout@v3
-      - uses: falnyr/replace-env-vars-action@master
-        env:
-          IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
-          NLB: $NLB1
-        with:
-          filename: ./k8s/app.yml
-      - name: print ?
-        run: |
-          cat ./k8s/app.yml
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
+      - name: env export #todo
+        run: |
+          nlb=$(aws elbv2 describe-load-balancers --region $REGION | jq -r '.LoadBalancers[0].DNSName')
+          export NLB1=$nlb
+          echo $NLB1
+      - uses: falnyr/replace-env-vars-action@master
+        env:
+          IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
+          NLB: ${{ env.NLB1 }}
+        with:
+          filename: ./k8s/app.yml
+      - name: print ?
+        run: |
+          cat ./k8s/app.yml
       - name: update kubeconfig
         run: |
           aws eks update-kubeconfig --name dev_k8s_cluster --region $REGION
