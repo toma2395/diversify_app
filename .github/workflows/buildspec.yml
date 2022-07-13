@@ -93,7 +93,7 @@ jobs:
       - uses: falnyr/replace-env-vars-action@master
         env:
           IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
-          NLB: ${{ env.NLB1 }}
+          NLB: $NLB1
         with:
           filename: ./k8s/app.yml
       - name: print ?
