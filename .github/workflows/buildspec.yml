@@ -8,9 +8,9 @@ on:
 
 env:
   REGION: us-east-1
-  ACCOUNT_ID: '012648543433'
+  ACCOUNT_ID: '319876539559'
   DATABASE_UPDATE: False
-  NLB_DNS_NAME: ab494f716612d4e3b9608b94c870ffa5-598f8ea654277a83.elb.us-east-1.amazonaws.com
+  NLB_DNS_NAME: au-au.elb.us-east-1.amazonaws.com
 
 jobs:
   build:
@@ -65,6 +65,11 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.REGION }}
+    - name: env export #todo
+      run: |
+        nlb=$(aws elbv2 describe-load-balancers --region $REGION | jq -r '.LoadBalancers[0].DNSName')
+        export NLB1=$nlb
+        echo $NLB1
     - name:  Docker login
       run: |
         aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_app
@@ -88,7 +93,7 @@ jobs:
       - uses: falnyr/replace-env-vars-action@master
         env:
           IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
-          NLB: ${{ env.NLB_DNS_NAME }}
+          NLB: ${{ env.NLB1 }}
         with:
           filename: ./k8s/app.yml
       - name: print ?
