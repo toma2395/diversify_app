@@ -130,7 +130,7 @@ jobs:
           with:
             filename: ./k8s/db.yml
         - name:  Docker login
-          if:  env.DATABASE_UPDATE == True
+          if:  env.DATABASE_UPDATE == 'True'
           run: |
             aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db
         - name:  Docker build
@@ -139,11 +139,11 @@ jobs:
             docker tag diversify_db:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db:latest
           working-directory: ./db
         - name:  Docker push
-          if:  env.DATABASE_UPDATE == True
+          if:  env.DATABASE_UPDATE == 'True'
           run: |
             docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/diversify_db:latest
             sleep 3
         - name: deploy DB to k8s
-          if:  env.DATABASE_UPDATE == True
+          if:  env.DATABASE_UPDATE == 'True'
           run: |
             kubectl apply -f ./k8s/db.yml
