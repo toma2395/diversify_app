@@ -35,5 +35,5 @@ def get_all_volunteers():
 
 def get_one_volunteer_by_id(user_id):
     '''gets one volunteer by id'''
-    response = json.dumps(retrive_one_user(user_id), cls=DateEncoder)
+    response = json.dumps(retrive_one_user(user_id)[0], cls=DateEncoder)
     return response
