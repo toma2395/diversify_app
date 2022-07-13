@@ -9,7 +9,7 @@ on:
 env:
   REGION: us-east-1
   ACCOUNT_ID: '319876539559'
-  DATABASE_UPDATE: False
+  DATABASE_UPDATE: True
   NLB_DNS_NAME: ad9b9797cea364c8cbca703612c91596-08fb8f1773b32ab4.elb.us-east-1.amazonaws.com
 
 jobs:
