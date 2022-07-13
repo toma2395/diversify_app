@@ -92,14 +92,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
       - name: env export #todo
+        id: export_nlb
         run: |
           nlb=$(aws elbv2 describe-load-balancers --region $REGION | jq -r '.LoadBalancers[0].DNSName')
           export NLB1=$nlb
-          echo $NLB1
+          echo "::set-output name=NLB::$nlb"
       - uses: falnyr/replace-env-vars-action@master
         env:
           IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
-          NLB: ${{ env.NLB1 }}
+          NLB: ${{ jobs.deploy.steps.export_nlb.outputs.NLB }}
         with:
           filename: ./k8s/app.yml
       - name: print ?
