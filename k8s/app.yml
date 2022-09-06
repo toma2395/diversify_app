@@ -3,7 +3,6 @@ kind: Pod
 metadata:
   labels:
     app: diversify-app
-    dummy: labelka
   name: diversify-app
 spec:
   containers:
