@@ -24,7 +24,6 @@ metadata:
   labels:
     app: diversify-app
   name: diversify-app-service
-  namespace: default
 spec:
   ports:
   - name: "8070"
@@ -42,7 +41,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: diversify-app-ingress
-  namespace: default
   annotations:
    kubernetes.io/ingress.class: "nginx"
    nginx.ingress.kubernetes.io/rewrite-target: /$2
