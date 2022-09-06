@@ -4,7 +4,6 @@ metadata:
   labels:
     app: diversify-app
   name: diversify-app
-  namespace: default
 spec:
   containers:
   - image: 537558070891.dkr.ecr.us-east-1.amazonaws.com/diversify_app:latest
