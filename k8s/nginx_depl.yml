@@ -28,7 +28,7 @@ kind: Service
 metadata:
   namespace: default
   labels:
-    app: service-nginx
+    app: nginx
   name: service-nginx
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
