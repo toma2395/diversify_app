@@ -5,7 +5,7 @@ metadata:
     app: nginx
   name: nginx
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: nginx
@@ -28,7 +28,7 @@ kind: Service
 metadata:
   namespace: default
   labels:
-    app: nginx
+    app: service-nginx
   name: service-nginx
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
