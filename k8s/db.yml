@@ -13,7 +13,7 @@ spec:
       value: mypassword
     - name: POSTGRES_DATABASE
       value: diversify_db
-    image: 537558070891.dkr.ecr.us-east-1.amazonaws.com/diversify_db:latest
+    image: postgres:latest
     name: diversify-db
     ports:
     - containerPort: 5432
