@@ -2,14 +2,14 @@ name: Python application
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "*" ]
 
 env:
   REGION: us-east-1
-  ACCOUNT_ID: '537558070891'
-  DATABASE_UPDATE: True
+  ACCOUNT_ID: '684774864993'
+  DATABASE_UPDATE: False
   NLB_DNS_NAME: af47b279cf9bb4352aa40dd3769528ec-870d06aeac590bf8.elb.us-east-1.amazonaws.com
 
 jobs:
@@ -100,14 +100,12 @@ jobs:
       - name: print ?
         run: |
           cat ./k8s/app.yml
-      - name: update kubeconfig
+      - name: Deployment with argocd
         run: |
-          aws eks update-kubeconfig --name dev_k8s_cluster --region $REGION
-      - name: deploy APP to k8s
-        run: |
-          kubectl apply -f ./k8s/app.yml
-
-
+          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
+          git config --global user.email "$(git log -n 1 --pretty=format:%ae)"
+          git commit -am "Feature release latest"
+          git push
 
 
   deploy_db:
