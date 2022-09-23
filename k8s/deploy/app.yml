@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: diversify-app
+  name: diversify-app
+  namespace: default
+spec:
+  containers:
+  - image: 684774864993.dkr.ecr.us-east-1.amazonaws.com/diversify_app:latest #image
+    name: diversify-app
+    ports:
+    - containerPort: 8080
+    env:
+      - name: DATABASE_HOST
+        value: db-service
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: diversify-app
+  name: diversify-app-service
+  namespace: default
+spec:
+  ports:
+  - name: "8070"
+    port: 8070
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: diversify-app
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: diversify-app-ingress
+  namespace: default
+  annotations:
+   kubernetes.io/ingress.class: "nginx"
+   nginx.ingress.kubernetes.io/rewrite-target: /$2
+   #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+   #nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  rules:
+  - host:  au-870d06aeac590bf8.elb.us-east-1.amazonaws.com #NLB
+    http:
+      paths:
+      - backend:
+          service:
+            name: diversify-app-service
+            port:
+              number: 8070
+        path: /diversify(/|$)(.*)
+        pathType: Prefix
+status:
+  loadBalancer: {}
