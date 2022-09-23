@@ -7,7 +7,7 @@ metadata:
   namespace: default
 spec:
   containers:
-  - image: 684774864993.dkr.ecr.us-east-1.amazonaws.com/diversify_app:latest #image
+  - image: __IMAGEURL__ #image
     name: diversify-app
     ports:
     - containerPort: 8080
@@ -51,7 +51,7 @@ metadata:
    #nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 spec:
   rules:
-  - host: af47b279cf9bb4352aa40dd3769528ec-870d06aeac590bf8.elb.us-east-1.amazonaws.com #NLB
+  - host:  __NLB__ #NLB
     http:
       paths:
       - backend:
