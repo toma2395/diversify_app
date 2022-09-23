@@ -10,7 +10,7 @@ spec:
   - image: __IMAGEURL__ #image
     name: diversify-app
     ports:
-    - containerPort: 8081
+    - containerPort: 8080
     env:
       - name: DATABASE_HOST
         value: db-service
