@@ -94,7 +94,7 @@ jobs:
       - name: move to deployment directory
         run: |
           mkdir -p ./k8s/deploy
-          cp -rf ./k8s/app.yml  ./k8s/deploy/
+          cp -f ./k8s/app.yml ./k8s/db.yml ./k8s/deploy/
       - uses: falnyr/replace-env-vars-action@master
         env:
           IMAGEURL: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/diversify_app:latest
@@ -108,6 +108,7 @@ jobs:
         run: |
           git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git config --global user.email "$(git log -n 1 --pretty=format:%ae)"
+          git add ./k8s/deploy/*
           git commit -am "Feature release latest"
           git push
 
